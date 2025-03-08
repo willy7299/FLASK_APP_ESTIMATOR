@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Price Estimator</title>
+    <script>
+        function getEstimate() {
+            let service = document.getElementById("service").value;
+            let area = document.getElementById("area").value;
+
+            fetch('/estimate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ service, area })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.estimated_price) {
+                    document.getElementById("result").innerText = "$" + data.estimated_price;
+                } else {
+                    document.getElementById("result").innerText = "Error: " + data.error;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <h2>Service Price Estimator</h2>
+    <label for="service">Select a service:</label>
+    <select id="service">
+        <option value="roofing">Roofing</option>
+        <option value="painting">Painting</option>
+        <option value="power_washing">Power Washing</option>
+    </select>
+
+    <label for="area">Enter area (sq ft):</label>
+    <input type="number" id="area" placeholder="Enter size">
+
+    <button onclick="getEstimate()">Get Estimate</button>
+
+    <h3>Estimated Price: <span id="result">$0.00</span></h3>
+</body>
+</html>
