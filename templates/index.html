@@ -16,8 +16,9 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.estimated_price) {
-                    document.getElementById("result").innerText = "$" + data.estimated_price;
+                if (data.total_price) {
+                    document.getElementById("result").innerText = 
+                        `Service: ${data.service}, Price: $${data.total_price}`;
                 } else {
                     document.getElementById("result").innerText = "Error: " + data.error;
                 }
@@ -28,11 +29,12 @@
 </head>
 <body>
     <h2>Service Price Estimator</h2>
+
     <label for="service">Select a service:</label>
     <select id="service">
-        <option value="roofing">Roofing</option>
-        <option value="painting">Painting</option>
-        <option value="power_washing">Power Washing</option>
+        {% for service in services %}
+            <option value="{{ service }}">{{ service }}</option>
+        {% endfor %}
     </select>
 
     <label for="area">Enter area (sq ft):</label>
